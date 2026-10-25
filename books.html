@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title> Fetch JSON Data </title>
+</head>
+
+<body>
+    <h2> Book Information </h2>
+    <div id="content"></div>
+    <p id="errorMessage" style="color: red;"></p>
+
+    <script>
+        async function loadBooks() {
+            try {
+                const response = await fetch('books.json');
+                
+                if (!response.ok) {
+                    throw new Error("Network response was not ok");
+                }
+                
+                const data = await response.json();
+                const contentDiv = document.getElementById("content");
+
+                // (a) Title of the first book
+                const title1 = document.createElement("p");
+                title1.textContent = data.books[0].title;
+                contentDiv.appendChild(title1);
+
+                // (b) Author of the second book
+                const author2 = document.createElement("p");
+                author2.textContent = data.books[1].author;
+                contentDiv.appendChild(author2);
+
+                // (c) Genres of both books, clearly grouped by book title
+                const genres1 = document.createElement("p");
+                genres1.textContent = `${data.books[0].title} — ${data.books[0].genres.join(", ")}`;
+                contentDiv.appendChild(genres1);
+
+                const genres2 = document.createElement("p");
+                genres2.textContent = `${data.books[1].title} — ${data.books[1].genres.join(", ")}`;
+                contentDiv.appendChild(genres2);
+
+            } catch (error) {
+                // Handle invalid JSON or fetch errors by displaying a user-friendly error message
+                document.getElementById("errorMessage").textContent = "Failed to load book data. Please ensure you are running this page through a local server.";
+                console.error("Error:", error);
+            }
+        }
+
+        loadBooks();
+    </script>
+</body>
+</html>
